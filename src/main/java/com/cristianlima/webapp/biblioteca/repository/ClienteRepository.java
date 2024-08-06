@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.cristianlima.webapp.biblioteca.model.Cliente;
 
-public interface IClienteRepository extends JpaRepository<Cliente,Long>{
+public interface ClienteRepository extends JpaRepository<Cliente,Long>{
 
 }

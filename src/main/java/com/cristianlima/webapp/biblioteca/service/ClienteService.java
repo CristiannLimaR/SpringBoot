@@ -6,13 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cristianlima.webapp.biblioteca.model.Cliente;
-import com.cristianlima.webapp.biblioteca.repository.IClienteRepository;
+import com.cristianlima.webapp.biblioteca.repository.ClienteRepository;
 
 @Service
 public class ClienteService implements IClienteService{
 
     @Autowired
-    private IClienteRepository clienteRepository;
+    private ClienteRepository clienteRepository;
 
     @Override
     public List<Cliente> listarClientes(){
