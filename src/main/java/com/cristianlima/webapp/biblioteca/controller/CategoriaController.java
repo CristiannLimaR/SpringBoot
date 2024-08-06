@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class CategoriaController {
 
     @Autowired
-    CategoriaService categoriaService;
+    private CategoriaService categoriaService;
 
     @GetMapping("/")
     public List<Categoria> listaCategorias() {
@@ -69,7 +69,7 @@ public class CategoriaController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("err","La categoria no se pudo editar");
-            return ResponseEntity.ok(response);
+            return ResponseEntity.badRequest().body(response);
         }
 
     }
