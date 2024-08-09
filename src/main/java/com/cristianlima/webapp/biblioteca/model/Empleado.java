@@ -21,5 +21,5 @@ public class Empleado {
     private String apellido;
     private String telefono;
     private String direccion;
-    private String DPI;
+    private String Dpi;
 }
