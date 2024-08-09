@@ -14,13 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cristianlima.webapp.biblioteca.model.Categoria;
 import com.cristianlima.webapp.biblioteca.service.CategoriaService;
 
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
-
 
 @Controller
 @RestController
@@ -49,9 +47,14 @@ public class CategoriaController {
     public ResponseEntity<Map<String, String>> agregarCategoria(@RequestBody Categoria categoria) {
         Map<String, String> response = new HashMap<>();
         try {
-            categoriaService.guardarCategoria(categoria);
-            response.put("message", "Categoria agregada con extio");
-            return ResponseEntity.ok(response);
+            if (categoriaService.guardarCategoria(categoria)) {
+                response.put("message", "Categoria agregada con extio");
+                return ResponseEntity.ok(response);
+            }else{
+                response.put("err", "Error al agregar la categoria");
+            return ResponseEntity.badRequest().body(response);
+            }
+
         } catch (Exception e) {
             response.put("err", "Error al agregar la categoria");
             return ResponseEntity.badRequest().body(response);
@@ -66,10 +69,10 @@ public class CategoriaController {
             Categoria oldCategoria = categoriaService.buscarCategoriaPorId(id);
             oldCategoria.setNombreCategoria(newCategoria.getNombreCategoria());
             categoriaService.guardarCategoria(oldCategoria);
-            response.put("message","La categoria se edito con éxito");
+            response.put("message", "La categoria se edito con éxito");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            response.put("err","La categoria no se pudo editar");
+            response.put("err", "La categoria no se pudo editar");
             return ResponseEntity.badRequest().body(response);
         }
 
