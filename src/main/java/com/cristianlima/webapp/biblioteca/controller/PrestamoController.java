@@ -58,19 +58,18 @@ public class PrestamoController {
                 case 3:
                     response.put("err", "Libro no disponible");
                     return ResponseEntity.badRequest().body(response);
+                case 4:
+                    response.put("err", "No se pueden prestar más de 3 libros");
+                    return ResponseEntity.badRequest().body(response);
                 default:
                     response.put("err", "No se pudo agregar el préstamo");
                     return ResponseEntity.badRequest().body(response);
             }
         } catch (Exception e) {
-            // Proporciona el mensaje de excepción
             response.put("err", "Error al procesar el préstamo: " + e.getMessage());
             return ResponseEntity.badRequest().body(response);
         }
     }
-    
-
-    
 
     @PutMapping("/prestamo")
     public ResponseEntity<Map<String, String>> editarPrestamo(@RequestParam Long id,
@@ -89,11 +88,17 @@ public class PrestamoController {
             if (mensaje == 1) {
                 response.put("message", "Prestamo editado con exito");
                 return ResponseEntity.ok(response);
-            } else {
+            } else if (mensaje == 2) {
+                response.put("err", "Libro no disponible");
+                return ResponseEntity.badRequest().body(response);
+            } else if (mensaje == 3) {
+                response.put("err", "No se pueden prestar más de 3 libros");
+                return ResponseEntity.badRequest().body(response);
+            }  else {
                 response.put("err", "No se pudo editar el prestamo");
                 return ResponseEntity.badRequest().body(response);
             }
-            
+
         } catch (Exception e) {
             response.put("err", "No se pudo editar el prestamo");
             return ResponseEntity.badRequest().body(response);

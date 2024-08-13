@@ -16,7 +16,9 @@ public interface IPrestamoService {
 
     public Boolean verificarCliente(Prestamo newPrestamo);
 
-    public Boolean verificarLibro(Prestamo newPrestamo);
+    public Boolean verificarLibro(Prestamo newPrestamo, Prestamo prestamo);
+
+    public Boolean verificarCantidad(Prestamo newPrestamo);
 
     
 

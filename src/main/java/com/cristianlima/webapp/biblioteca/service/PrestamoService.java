@@ -1,5 +1,6 @@
 package com.cristianlima.webapp.biblioteca.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ public class PrestamoService implements IPrestamoService {
 
     @Autowired
     private PrestamoRepository prestamoRepository;
+    @Autowired
+    LibroService libroService;
 
     @Override
     public List<Prestamo> listarPrestamos() {
@@ -28,11 +31,19 @@ public class PrestamoService implements IPrestamoService {
 
     @Override
     public Integer guardarPrestamo(Prestamo prestamo, MethodType methodType) {
-        if (methodType.equals(MethodType.POST)) {
+        if (methodType == MethodType.POST) {
             if (!verificarCliente(prestamo)) {
-                if (verificarLibro(prestamo)) {
-                    prestamoRepository.save(prestamo);
-                    return 1;
+                if (verificarLibro(prestamo, null)) {
+                    if (verificarCantidad(prestamo)) {
+                        for (Libro libro : prestamo.getLibros()) {
+                            Libro libroCompleto = libroService.buscarLibroPorId(libro.getId());
+                            libroService.actualizarDisponibilidad(libroCompleto, false);
+                        }
+                        prestamoRepository.save(prestamo);
+                        return 1;
+                    } else {
+                        return 4;
+                    }
                 } else {
                     return 3;
                 }
@@ -40,10 +51,38 @@ public class PrestamoService implements IPrestamoService {
             } else {
                 return 2;
             }
-        } else if (methodType.equals(MethodType.PUT)) {
-            prestamoRepository.save(prestamo);
-            return 1;
-        } else {
+        } else if (methodType == MethodType.PUT) {
+            if (verificarCantidad(prestamo)) {
+        
+                Prestamo prestamoOriginal = buscarPrestamoPorId(prestamo.getId());
+                List<Libro> librosNuevos = new ArrayList<>();
+        
+                for (Libro libro : prestamo.getLibros()) {
+                    Libro libroCompleto = libroService.buscarLibroPorId(libro.getId());
+                    librosNuevos.add(libroCompleto);
+                }
+
+                if(verificarLibro(prestamoOriginal, prestamo))
+                for (Libro libroOriginal : prestamoOriginal.getLibros()) {
+                    if (!librosNuevos.contains(libroOriginal)) {
+                        Libro libro = libroService.buscarLibroPorId(libroOriginal.getId());
+                        libroService.actualizarDisponibilidad(libro, true);
+                        System.out.println("ASDASD " + libro.getNombre() + " set to true");
+                    }
+                }
+        
+                for (Libro libro : prestamo.getLibros()) {
+                    Libro libroCompleto = libroService.buscarLibroPorId(libro.getId());
+                    libroService.actualizarDisponibilidad(libroCompleto, false);
+                    System.out.println("dsfdsfdsf " + libro.getNombre() + " set to false");
+                }
+        
+                prestamoRepository.save(prestamo);
+                return 1;
+            } else {
+                return 3;
+            }
+        }else{
             return 0;
         }
 
@@ -51,6 +90,10 @@ public class PrestamoService implements IPrestamoService {
 
     @Override
     public void eliminarPrestamo(Prestamo prestamo) {
+        for (Libro libro : prestamo.getLibros()) {
+            Libro libroCompleto = libroService.buscarLibroPorId(libro.getId());
+            libroService.actualizarDisponibilidad(libroCompleto, true);
+        }
         prestamoRepository.delete(prestamo);
     }
 
@@ -67,20 +110,52 @@ public class PrestamoService implements IPrestamoService {
     }
 
     @Override
-    public Boolean verificarLibro(Prestamo newPrestamo) {
-        if (newPrestamo == null || newPrestamo.getLibros() == null) {
-            return false;
-        }
-
+    public Boolean verificarLibro(Prestamo newPrestamo, Prestamo prestamo) {
         Boolean flag = true;
-        List<Libro> libros = newPrestamo.getLibros();
-        for (Libro libro : libros) {
-            if (libro == null || libro.getDisponibilidad() == null ||  !libro.getDisponibilidad()) {
-                flag = false;
-                break;
+        List<Libro> libros = new ArrayList<>();
+        if (prestamo != null) {
+            for (Libro libro : newPrestamo.getLibros()) {
+                Libro libroCompleto = libroService.buscarLibroPorId(libro.getId());
+                if (!prestamo.getLibros().contains(libro)) {
+                    if (!libroCompleto.getDisponibilidad()) {
+                        flag = false;
+                        break;
+                    }
+                }
+            }
+
+        } else {
+            for (Libro libro : newPrestamo.getLibros()) {
+                Libro libroCompleto = libroService.buscarLibroPorId(libro.getId());
+                libros.add(libroCompleto);
+            }
+
+            for (Libro libro : libros) {
+                if (!libro.getDisponibilidad()) {
+                    flag = false;
+                    break;
+                }
             }
         }
+
         return flag;
+    }
+
+
+
+    @Override
+    public Boolean verificarCantidad(Prestamo newPrestamo) {
+        List<Libro> libros = new ArrayList<>();
+
+        for (Libro libro : newPrestamo.getLibros()) {
+            Libro libroCompleto = libroService.buscarLibroPorId(libro.getId());
+            libros.add(libroCompleto);
+        }
+        if (libros.size() <= 3) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

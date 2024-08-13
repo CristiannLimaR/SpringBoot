@@ -33,5 +33,11 @@ public class LibroService implements ILibroService{
     public void eliminarLibro(Libro libro) {
         libroRepository.delete(libro);
     }
+
+    @Override
+    public void actualizarDisponibilidad(Libro libro, Boolean disponibilidad) {
+            libro.setDisponibilidad(disponibilidad);
+            guardarLibro(libro);
+    }
     
 }
