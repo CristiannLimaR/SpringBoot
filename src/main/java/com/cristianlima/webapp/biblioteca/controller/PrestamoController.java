@@ -83,6 +83,7 @@ public class PrestamoController {
             prestamo.setVigencia(newPrestamo.getVigencia());
             prestamo.setEmpleado(newPrestamo.getEmpleado());
             prestamo.setCliente(newPrestamo.getCliente());
+            prestamoService.librosRegresados(prestamo, newPrestamo);
             prestamo.setLibros(newPrestamo.getLibros());
             int mensaje = prestamoService.guardarPrestamo(prestamo, MethodType.PUT);
             if (mensaje == 1) {

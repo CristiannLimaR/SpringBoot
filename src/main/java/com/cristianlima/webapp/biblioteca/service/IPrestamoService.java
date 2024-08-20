@@ -2,6 +2,7 @@ package com.cristianlima.webapp.biblioteca.service;
 
 import java.util.List;
 
+import com.cristianlima.webapp.biblioteca.model.Libro;
 import com.cristianlima.webapp.biblioteca.model.Prestamo;
 import com.cristianlima.webapp.biblioteca.util.MethodType;
 
@@ -20,6 +21,9 @@ public interface IPrestamoService {
 
     public Boolean verificarCantidad(Prestamo newPrestamo);
 
+    public void cambiarDisponibilidadLibro(List<Libro> libros, Boolean disponibilidad);
+
+    public void librosRegresados(Prestamo prestamo, Prestamo newPrestamo);
     
 
 }

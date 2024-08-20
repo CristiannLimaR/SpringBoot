@@ -53,30 +53,6 @@ public class PrestamoService implements IPrestamoService {
             }
         } else if (methodType == MethodType.PUT) {
             if (verificarCantidad(prestamo)) {
-        
-                Prestamo prestamoOriginal = buscarPrestamoPorId(prestamo.getId());
-                List<Libro> librosNuevos = new ArrayList<>();
-        
-                for (Libro libro : prestamo.getLibros()) {
-                    Libro libroCompleto = libroService.buscarLibroPorId(libro.getId());
-                    librosNuevos.add(libroCompleto);
-                }
-
-                if(verificarLibro(prestamoOriginal, prestamo))
-                for (Libro libroOriginal : prestamoOriginal.getLibros()) {
-                    if (!librosNuevos.contains(libroOriginal)) {
-                        Libro libro = libroService.buscarLibroPorId(libroOriginal.getId());
-                        libroService.actualizarDisponibilidad(libro, true);
-                        System.out.println("ASDASD " + libro.getNombre() + " set to true");
-                    }
-                }
-        
-                for (Libro libro : prestamo.getLibros()) {
-                    Libro libroCompleto = libroService.buscarLibroPorId(libro.getId());
-                    libroService.actualizarDisponibilidad(libroCompleto, false);
-                    System.out.println("dsfdsfdsf " + libro.getNombre() + " set to false");
-                }
-        
                 prestamoRepository.save(prestamo);
                 return 1;
             } else {
@@ -86,6 +62,27 @@ public class PrestamoService implements IPrestamoService {
             return 0;
         }
 
+    }
+
+    @Override
+    public void librosRegresados(Prestamo prestamo, Prestamo newPrestamo){
+        List<Libro> librosRegresados = new ArrayList<>();
+        for (Libro libro : prestamo.getLibros()) {
+            Libro   libroCompleto = libroService.buscarLibroPorId(libro.getId());
+            if (!newPrestamo.getLibros().contains(libroCompleto)) {
+                librosRegresados.add(libroCompleto);
+            }
+        }
+        cambiarDisponibilidadLibro(librosRegresados, true);
+        cambiarDisponibilidadLibro(newPrestamo.getLibros(), false);
+    }
+
+    @Override
+    public void cambiarDisponibilidadLibro(List<Libro> libros, Boolean disponibilidad) {
+        for (Libro libro : libros) {
+            Libro libroCompleto = libroService.buscarLibroPorId(libro.getId());
+            libroService.actualizarDisponibilidad(libroCompleto, disponibilidad);
+        }
     }
 
     @Override
