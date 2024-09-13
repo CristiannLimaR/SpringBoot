@@ -74,6 +74,7 @@ public class CategoriaFXController implements Initializable {
         cargarDatos();
     }
 
+    
     public void cargarDatos() {
         tblCategorias.setItems(listaCategorias());
         colId.setCellValueFactory(new PropertyValueFactory<Categoria, Long>("id"));

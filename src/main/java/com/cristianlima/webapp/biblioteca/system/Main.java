@@ -12,6 +12,7 @@ import com.cristianlima.webapp.biblioteca.controller.FXController.ClienteFXContr
 import com.cristianlima.webapp.biblioteca.controller.FXController.EmpleadoFXController;
 import com.cristianlima.webapp.biblioteca.controller.FXController.IndexController;
 import com.cristianlima.webapp.biblioteca.controller.FXController.LibroFXController;
+import com.cristianlima.webapp.biblioteca.controller.FXController.PrestamoFXController;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -97,6 +98,15 @@ public class Main extends Application {
         try {
             EmpleadoFXController empleadoView = (EmpleadoFXController)switchScene("EmpleadoView.fxml", 1400,750);
             empleadoView.setStage(this );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void PrestamoView(){
+        try {
+            PrestamoFXController prestamoView = (PrestamoFXController)switchScene("PrestamoView.fxml", 1400,750);
+            prestamoView.setStage(this );
         } catch (Exception e) {
             e.printStackTrace();
         }
