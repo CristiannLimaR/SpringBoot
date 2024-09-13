@@ -8,11 +8,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.ToString;
+
 
 @Entity
 @Data
-@ToString
 @Table(name = "Categorias")
 public class Categoria {
     @Id
@@ -20,4 +19,12 @@ public class Categoria {
     private Long id;
     @NotNull(message = "NombreCategoria no puede ser nulo")
     private String nombreCategoria;
+
+    @Override
+    public String toString() {
+        return nombreCategoria;
+    }
+
+    
+    
 }

@@ -3,7 +3,7 @@ package com.cristianlima.webapp.biblioteca;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.system.Main;
+import com.cristianlima.webapp.biblioteca.system.Main;
 
 import javafx.application.Application;
 
