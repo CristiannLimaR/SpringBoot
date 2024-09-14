@@ -19,6 +19,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
  
@@ -49,8 +50,9 @@ public class Main extends Application {
         InputStream archivo  =  Main.class.getResourceAsStream("/templates/" + fxmlName);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
         loader.setLocation(Main.class.getResource("/templates/" + fxmlName));
- 
+        Image icon = new Image("/images/Logo.png");
         scene = new Scene((AnchorPane) loader.load(archivo),width,height);
+        stage.getIcons().add(icon);
         stage.setScene(scene);
         stage.sizeToScene();
  

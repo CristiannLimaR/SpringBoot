@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.cristianlima.webapp.biblioteca.model.Categoria;
 import com.cristianlima.webapp.biblioteca.service.CategoriaService;
 import com.cristianlima.webapp.biblioteca.system.Main;
+import com.cristianlima.webapp.biblioteca.util.MethodType;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -88,7 +89,7 @@ public class CategoriaFXController implements Initializable {
     public void agregarCategoria() {
         Categoria categoria = new Categoria();
         categoria.setNombreCategoria(tfNombre.getText());
-        categoriaService.guardarCategoria(categoria);
+        categoriaService.guardarCategoria(categoria,MethodType.POST);
         cargarDatos();
     }
 
@@ -108,7 +109,7 @@ public class CategoriaFXController implements Initializable {
     public void editarCategoria() {
         Categoria categoria = categoriaService.buscarCategoriaPorId(Long.parseLong(tfId.getText()));
         categoria.setNombreCategoria(tfNombre.getText());
-        categoriaService.guardarCategoria(categoria);
+        categoriaService.guardarCategoria(categoria,MethodType.PUT);
         cargarDatos();
     }
 

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cristianlima.webapp.biblioteca.model.Categoria;
 import com.cristianlima.webapp.biblioteca.service.CategoriaService;
+import com.cristianlima.webapp.biblioteca.util.MethodType;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,7 +48,7 @@ public class CategoriaController {
     public ResponseEntity<Map<String, String>> agregarCategoria(@RequestBody Categoria categoria) {
         Map<String, String> response = new HashMap<>();
         try {
-            if (categoriaService.guardarCategoria(categoria)) {
+            if (categoriaService.guardarCategoria(categoria, MethodType.POST)) {
                 response.put("message", "Categoria agregada con extio");
                 return ResponseEntity.ok(response);
             }else{
@@ -68,7 +69,7 @@ public class CategoriaController {
         try {
             Categoria oldCategoria = categoriaService.buscarCategoriaPorId(id);
             oldCategoria.setNombreCategoria(newCategoria.getNombreCategoria());
-            categoriaService.guardarCategoria(oldCategoria);
+            categoriaService.guardarCategoria(oldCategoria, MethodType.PUT);
             response.put("message", "La categoria se edito con éxito");
             return ResponseEntity.ok(response);
         } catch (Exception e) {

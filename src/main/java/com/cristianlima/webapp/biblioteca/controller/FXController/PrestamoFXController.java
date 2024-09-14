@@ -18,6 +18,7 @@ import com.cristianlima.webapp.biblioteca.service.ClienteService;
 import com.cristianlima.webapp.biblioteca.service.LibroService;
 import com.cristianlima.webapp.biblioteca.service.PrestamoService;
 import com.cristianlima.webapp.biblioteca.system.Main;
+import com.cristianlima.webapp.biblioteca.util.LibreriaAlert;
 import com.cristianlima.webapp.biblioteca.util.MethodType;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -76,10 +77,13 @@ public class PrestamoFXController implements Initializable {
     @Autowired
     LibroService libroService;
 
+    @Autowired 
+    LibreriaAlert libreriaAlert;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         cargarDatos();
-        llenarCmbs();
+        
     }
 
     @FXML
@@ -125,6 +129,8 @@ public class PrestamoFXController implements Initializable {
             } else if (estado == 1) {
                 cmbLibro3.setDisable(false);
                 estado = 2;
+            }else if(estado == 2){
+                libreriaAlert.mostrarAlertaInfo(400);
             }
         }
     }
@@ -145,6 +151,7 @@ public class PrestamoFXController implements Initializable {
         colVigencia.setCellValueFactory(new PropertyValueFactory<Prestamo, Boolean>("vigencia"));
         colFechaPrestamo.setCellValueFactory(new PropertyValueFactory<Prestamo, Date>("fechaDePrestamo"));
         colFechaDevolucion.setCellValueFactory(new PropertyValueFactory<Prestamo, Date>("fechaDeDevolucion"));
+        llenarCmbs();
     }
 
     public ObservableList<Prestamo> listaPrestamos() {
@@ -197,15 +204,19 @@ public class PrestamoFXController implements Initializable {
             cmbCliente.getSelectionModel().select(obtenerIndexCliente());
             cmbEmpleado.getSelectionModel().select(obtenerIndexEmpleado());
             int libros = prestamo.getLibros().size();
+            
             if (libros == 1) {
+                estado = 0;
                 cmbLibro1.getSelectionModel().select(obtenerIndexLibro1());
                 cmbLibro2.setDisable(true);
                 cmbLibro3.setDisable(true);
             } else if (libros == 2) {
+                estado = 1;
                 cmbLibro2.setDisable(false);
                 cmbLibro2.getSelectionModel().select(obtenerIndexLibro2());
                 cmbLibro3.setDisable(true);
             } else {
+                estado = 2;
                 cmbLibro3.setDisable(false);
                 cmbLibro3.getSelectionModel().select(obtenerIndexLibro3());
             }
@@ -224,6 +235,7 @@ public class PrestamoFXController implements Initializable {
         cmbLibro3.getSelectionModel().clearSelection();
         cmbLibro2.setDisable(true);
         cmbLibro3.setDisable(true);
+        estado = 0;
     }
 
     public void eliminarPrestamo() {

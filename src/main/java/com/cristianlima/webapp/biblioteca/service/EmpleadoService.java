@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 
 import com.cristianlima.webapp.biblioteca.model.Empleado;
 import com.cristianlima.webapp.biblioteca.repository.EmpleadoRepository;
+import com.cristianlima.webapp.biblioteca.util.LibreriaAlert;
+import com.cristianlima.webapp.biblioteca.util.MethodType;
+
+import javafx.scene.control.ButtonType;
 
 @Service
 
@@ -14,6 +18,10 @@ public class EmpleadoService implements IEmpleadoService {
 
     @Autowired
     private EmpleadoRepository empleadoRepository;
+
+    @Autowired
+    LibreriaAlert libreriaAlert;
+
 
     @Override
     public List<Empleado> listarEmpleados(){
@@ -26,17 +34,48 @@ public class EmpleadoService implements IEmpleadoService {
     }
 
     @Override
-    public Boolean guardarEmpleado(Empleado empleado) {
-        if(!verificarpDpiDuplicado(empleado)){
-            empleadoRepository.save(empleado);
-            return true;
+    public Boolean guardarEmpleado(Empleado empleado, MethodType methodType) {
+        try {
+            if(methodType == MethodType.POST){
+                if(!verificarpDpiDuplicado(empleado)){
+                    empleadoRepository.save(empleado);
+                    libreriaAlert.mostrarAlertaInfo(401);
+                    return true;
+                }else{
+                    libreriaAlert.mostrarAlertaInfo(406);
+                }
+            }else{
+                if(libreriaAlert.mostrarAlertaConfirmacion(106).get() == ButtonType.OK){
+                    if(!verificarpDpiDuplicado(empleado)){
+                        empleadoRepository.save(empleado);
+                        libreriaAlert.mostrarAlertaInfo(401);
+                        return true;
+                    }else{
+                        libreriaAlert.mostrarAlertaInfo(406);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            libreriaAlert.mostrarAlertaInfo(404);
+            return false;
         }
-        return false;
+        return null;
+        
+        
+
     }
 
     @Override
     public void eliminarEmpleado(Empleado empleado) {
-        empleadoRepository.delete(empleado);
+        try {
+            if(libreriaAlert.mostrarAlertaConfirmacion(405).get() == ButtonType.OK){
+                empleadoRepository.delete(empleado);
+            }
+        } catch (Exception e) {
+            libreriaAlert.mostrarAlertaInfo(404);
+        }
+        
+        
     }
 
     @Override

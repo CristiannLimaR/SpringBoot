@@ -10,6 +10,7 @@ import com.cristianlima.webapp.biblioteca.model.Cliente;
 import com.cristianlima.webapp.biblioteca.model.Empleado;
 import com.cristianlima.webapp.biblioteca.service.EmpleadoService;
 import com.cristianlima.webapp.biblioteca.system.Main;
+import com.cristianlima.webapp.biblioteca.util.MethodType;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -128,7 +129,7 @@ public class EmpleadoFXController implements Initializable {
         empleado.setTelefono(tfTelefono.getText());
         empleado.setDireccion(taDireccion.getText());
         empleado.setDpi(tfDpi.getText());
-        empleadoService.guardarEmpleado(empleado);
+        empleadoService.guardarEmpleado(empleado, MethodType.POST);
         cargarDatos();
     }
 
@@ -139,7 +140,7 @@ public class EmpleadoFXController implements Initializable {
         empleado.setTelefono(tfTelefono.getText());
         empleado.setDireccion(taDireccion.getText());
         empleado.setDpi(tfDpi.getText());
-        empleadoService.guardarEmpleado(empleado);
+        empleadoService.guardarEmpleado(empleado, MethodType.PUT);
         cargarDatos();
     }
 

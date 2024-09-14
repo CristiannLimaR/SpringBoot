@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cristianlima.webapp.biblioteca.model.Libro;
 import com.cristianlima.webapp.biblioteca.service.LibroService;
+import com.cristianlima.webapp.biblioteca.util.MethodType;
 
 
 @Controller
@@ -45,7 +46,7 @@ public class LibroController {
     public ResponseEntity<Map<String,String>> guardarLibro(@RequestBody Libro libro){
         Map<String,String> response =  new HashMap<>();
         try {
-            libroService.guardarLibro(libro);
+            libroService.guardarLibro(libro, MethodType.POST);
             response.put("message", "Libro agregado con éxito");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -68,7 +69,7 @@ public class LibroController {
             oldLibro.setIsbn(newLibro.getIsbn());
             oldLibro.setNumeroEstanteria(newLibro.getNumeroEstanteria());
             oldLibro.setSinopsis(newLibro.getSinopsis());
-            libroService.guardarLibro(oldLibro);
+            libroService.guardarLibro(oldLibro, MethodType.PUT);
             response.put("message", "libro editado con éxito");
             return ResponseEntity.ok(response);
         } catch (Exception e) {

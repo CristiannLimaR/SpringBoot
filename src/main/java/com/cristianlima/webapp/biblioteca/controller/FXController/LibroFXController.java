@@ -11,6 +11,7 @@ import com.cristianlima.webapp.biblioteca.model.Libro;
 import com.cristianlima.webapp.biblioteca.service.CategoriaService;
 import com.cristianlima.webapp.biblioteca.service.LibroService;
 import com.cristianlima.webapp.biblioteca.system.Main;
+import com.cristianlima.webapp.biblioteca.util.MethodType;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -154,7 +155,7 @@ public class LibroFXController implements Initializable {
         libro.setCluster(tfCluster.getText());
         libro.setCategoria((Categoria) cmbCategoria.getSelectionModel().getSelectedItem());
         libro.setDisponibilidad(true);
-        libroService.guardarLibro(libro);
+        libroService.guardarLibro(libro, MethodType.POST);
         cargarDatos();
     }
 
@@ -168,7 +169,7 @@ public class LibroFXController implements Initializable {
         libro.setNumeroEstanteria(tfNumEs.getText());
         libro.setCluster(tfCluster.getText());
         libro.setCategoria((Categoria) cmbCategoria.getSelectionModel().getSelectedItem());
-        libroService.guardarLibro(libro);
+        libroService.guardarLibro(libro, MethodType.PUT);
         cargarDatos();
     }
 

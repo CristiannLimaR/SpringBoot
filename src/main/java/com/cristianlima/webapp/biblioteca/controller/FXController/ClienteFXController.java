@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.cristianlima.webapp.biblioteca.model.Cliente;
 import com.cristianlima.webapp.biblioteca.service.ClienteService;
 import com.cristianlima.webapp.biblioteca.system.Main;
+import com.cristianlima.webapp.biblioteca.util.MethodType;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -116,7 +117,7 @@ public class ClienteFXController implements Initializable {
         cliente.setNombre(tfNombre.getText());
         cliente.setApellido(tfApellido.getText());
         cliente.setTelefono(tfTelefono.getText());
-        clienteService.guardarCliente(cliente);
+        clienteService.guardarCliente(cliente, MethodType.POST);
         cargarDatos();
     }
 
@@ -125,7 +126,7 @@ public class ClienteFXController implements Initializable {
         cliente.setNombre(tfNombre.getText());
         cliente.setApellido(tfApellido.getText());
         cliente.setTelefono(tfTelefono.getText());
-        clienteService.guardarCliente(cliente);
+        clienteService.guardarCliente(cliente, MethodType.PUT);
         cargarDatos();
     }
 

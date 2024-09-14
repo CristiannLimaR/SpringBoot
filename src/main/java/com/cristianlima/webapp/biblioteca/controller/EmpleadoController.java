@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cristianlima.webapp.biblioteca.model.Empleado;
 import com.cristianlima.webapp.biblioteca.service.EmpleadoService;
+import com.cristianlima.webapp.biblioteca.util.MethodType;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,7 +46,7 @@ public class EmpleadoController {
     public ResponseEntity<Map<String, String>> guardarEmpleado(@RequestBody Empleado empleado) {
         Map<String, String> response = new HashMap<>();
         try {
-            if (empleadoService.guardarEmpleado(empleado)) {
+            if (empleadoService.guardarEmpleado(empleado, MethodType.POST)) {
                 response.put("message", "Empleado agregado con éxito");
             } else {
                 response.put("err", "DPI duplicado");
@@ -70,7 +71,7 @@ public class EmpleadoController {
             oldEmpleado.setTelefono(newEmpleado.getTelefono());
             oldEmpleado.setDireccion(newEmpleado.getDireccion());
             oldEmpleado.setDpi(newEmpleado.getDpi());
-            if (empleadoService.guardarEmpleado(oldEmpleado)) {
+            if (empleadoService.guardarEmpleado(oldEmpleado, MethodType.PUT)) {
                 response.put("message", "El empleado se edito con éxito");
                 return ResponseEntity.ok(response);
             } else {
